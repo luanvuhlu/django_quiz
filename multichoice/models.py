@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-from django.utils.encoding import python_2_unicode_compatible
+# from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from quiz.models import Question
@@ -17,18 +17,19 @@ class MCQuestion(Question):
     answer_order = models.CharField(
         max_length=30, null=True, blank=True,
         choices=ANSWER_ORDER_OPTIONS,
+        default='random',
         help_text=_("The order in which multichoice "
                     "answer options are displayed "
                     "to the user"),
         verbose_name=_("Answer Order"))
 
-    def check_if_correct(self, guess):
-        answer = Answer.objects.get(id=guess)
-
-        if answer.correct is True:
-            return True
+    @staticmethod
+    def check_if_correct(guesses):
+        if type(guesses) == list:
+            answers = Answer.objects.filter(pk__in=guesses)
         else:
-            return False
+            answers = Answer.objects.filter(pk=guesses)
+        return all([answer.correct for answer in answers])
 
     def order_answers(self, queryset):
         if self.answer_order == 'content':
@@ -42,6 +43,9 @@ class MCQuestion(Question):
     def get_answers(self):
         return self.order_answers(Answer.objects.filter(question=self))
 
+    def is_multi_corrects(self):
+        return Answer.objects.filter(question=self).filter(correct=True).count() > 1
+
     def get_answers_list(self):
         return [(answer.id, answer.content) for answer in
                 self.order_answers(Answer.objects.filter(question=self))]
@@ -54,7 +58,7 @@ class MCQuestion(Question):
         verbose_name_plural = _("Multiple Choice Questions")
 
 
-@python_2_unicode_compatible
+# @python_2_unicode_compatible
 class Answer(models.Model):
     question = models.ForeignKey(MCQuestion, verbose_name=_("Question"), on_delete=models.CASCADE)
 

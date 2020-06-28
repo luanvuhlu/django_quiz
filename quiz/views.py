@@ -5,6 +5,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.views.generic import DetailView, ListView, TemplateView, FormView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import QuestionForm, EssayForm
 from .models import Quiz, Category, Progress, Sitting, Question
@@ -132,7 +133,7 @@ class QuizMarkingDetail(QuizMarkerMixin, DetailView):
         return context
 
 
-class QuizTake(FormView):
+class QuizTake(LoginRequiredMixin, FormView):
     form_class = QuestionForm
     template_name = 'question.html'
     result_template_name = 'result.html'
@@ -176,7 +177,6 @@ class QuizTake(FormView):
 
     def get_form_kwargs(self):
         kwargs = super(QuizTake, self).get_form_kwargs()
-
         return dict(kwargs, question=self.question)
 
     def form_valid(self, form):
@@ -207,7 +207,6 @@ class QuizTake(FormView):
         progress, c = Progress.objects.get_or_create(user=self.request.user)
         guess = form.cleaned_data['answers']
         is_correct = self.question.check_if_correct(guess)
-
         if is_correct is True:
             self.sitting.add_to_score(1)
             progress.update_score(self.question, 1, 1)

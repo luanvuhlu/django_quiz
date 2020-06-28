@@ -11,7 +11,7 @@
   {% if previous.answers %}
 
   <p class="muted"><small>{% trans "The previous question" %}:</small></p>
-  <p>{{ previous.previous_question }}</p>
+  <p>{{ previous.previous_question|safe }}</p>
   <p>Your answer was
 	<strong>
 	  {{ previous.previous_outcome|yesno:"correct,incorrect" }}
@@ -20,7 +20,7 @@
   {% include 'correct_answer.html' %}
   <p><strong>{% trans "Explanation" %}:</strong></p>
   <div class="well " style="background-color: #fcf8e3;">
-    <p>{{ previous.previous_question.explanation }}</p>
+    <p>{{ previous.previous_question.explanation|safe }}</p>
   </div>
   <hr>
 
@@ -35,7 +35,7 @@
 	  <strong>{{ quiz.title }}</strong></p>
 
 	<p class="lead">
-	  {% trans "You answered" %} {{ score }} {% trans "questions correctly out of" %} {{ max_score }}, {% trans "giving you" %} {{ percent }} {% trans "percent correct" %}
+	  {% trans "You answered" %} {{ score }} {% trans "questions correctly out of" %} {{ max_score }}, {% trans "giving you" %} {{ percent }} {% trans "% correct" %}
 	</p>
 
 	{% if quiz.pass_mark %}
@@ -52,6 +52,7 @@
 	  <p>{% trans "The result of this exam will be stored in your progress section so you can review and monitor your progression" %}.</p>
 
 	{% endif %}
+      <h3>Do you want to try it again? <a href="{{ request.path }}">Click me</a> </h3>
   </div>
 
 

@@ -9,8 +9,9 @@ from django.core.validators import (
 )
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
-from django.utils.encoding import python_2_unicode_compatible
+# from django.utils.encoding import python_2_unicode_compatible
 from django.conf import settings
+from ckeditor.fields import RichTextField
 
 from model_utils.managers import InheritanceManager
 
@@ -25,7 +26,7 @@ class CategoryManager(models.Manager):
         return new_category
 
 
-@python_2_unicode_compatible
+# @python_2_unicode_compatible
 class Category(models.Model):
 
     category = models.CharField(
@@ -43,7 +44,7 @@ class Category(models.Model):
         return self.category
 
 
-@python_2_unicode_compatible
+# @python_2_unicode_compatible
 class SubCategory(models.Model):
 
     sub_category = models.CharField(
@@ -64,7 +65,7 @@ class SubCategory(models.Model):
         return self.sub_category + " (" + self.category.category + ")"
 
 
-@python_2_unicode_compatible
+# @python_2_unicode_compatible
 class Quiz(models.Model):
 
     title = models.CharField(
@@ -541,7 +542,7 @@ class Sitting(models.Model):
         return answered, total
 
 
-@python_2_unicode_compatible
+# @python_2_unicode_compatible
 class Question(models.Model):
     """
     Base class for all question types.
@@ -569,13 +570,13 @@ class Question(models.Model):
                                null=True,
                                verbose_name=_("Figure"))
 
-    content = models.CharField(max_length=1000,
+    content = RichTextField(max_length=10000,
                                blank=False,
                                help_text=_("Enter the question text that "
                                            "you want displayed"),
                                verbose_name=_('Question'))
 
-    explanation = models.TextField(max_length=2000,
+    explanation = RichTextField(max_length=10000,
                                    blank=True,
                                    help_text=_("Explanation to be shown "
                                                "after the question has "
