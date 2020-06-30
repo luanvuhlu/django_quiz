@@ -4,3 +4,4 @@ Pillow>=4.0.0
 
 # Only needed for running tests.
 #tox
+django-import-export

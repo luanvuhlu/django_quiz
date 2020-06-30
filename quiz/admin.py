@@ -2,6 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.translation import ugettext_lazy as _
+from import_export.admin import ImportExportModelAdmin
 
 from .models import Quiz, Category, SubCategory, Progress, Question
 from multichoice.models import MCQuestion, Answer
@@ -47,7 +48,7 @@ class QuizAdminForm(forms.ModelForm):
         return quiz
 
 
-class QuizAdmin(admin.ModelAdmin):
+class QuizAdmin(ImportExportModelAdmin):
     form = QuizAdminForm
 
     list_display = ('title', 'category', )
@@ -55,7 +56,7 @@ class QuizAdmin(admin.ModelAdmin):
     search_fields = ('description', 'category', )
 
 
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(ImportExportModelAdmin):
     search_fields = ('category', )
 
 
@@ -65,7 +66,11 @@ class SubCategoryAdmin(admin.ModelAdmin):
     list_filter = ('category',)
 
 
-class MCQuestionAdmin(admin.ModelAdmin):
+class AnswerAdmin(ImportExportModelAdmin):
+    pass
+
+
+class MCQuestionAdmin(ImportExportModelAdmin):
     list_display = ('content', 'category', )
     list_filter = ('category',)
     fields = ('content', 'category', 'sub_category',
@@ -85,7 +90,7 @@ class ProgressAdmin(admin.ModelAdmin):
     search_fields = ('user', 'score', )
 
 
-class TFQuestionAdmin(admin.ModelAdmin):
+class TFQuestionAdmin(ImportExportModelAdmin):
     list_display = ('content', 'category', )
     list_filter = ('category',)
     fields = ('content', 'category', 'sub_category',
@@ -95,13 +100,15 @@ class TFQuestionAdmin(admin.ModelAdmin):
     filter_horizontal = ('quiz',)
 
 
-class EssayQuestionAdmin(admin.ModelAdmin):
+class EssayQuestionAdmin(ImportExportModelAdmin):
     list_display = ('content', 'category', )
     list_filter = ('category',)
     fields = ('content', 'category', 'sub_category', 'quiz', 'explanation', )
     search_fields = ('content', 'explanation')
     filter_horizontal = ('quiz',)
 
+
+admin.site.register(Answer, AnswerAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(SubCategory, SubCategoryAdmin)
