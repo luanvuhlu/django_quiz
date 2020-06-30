@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.translation import ugettext_lazy as _
 from import_export.admin import ImportExportModelAdmin
-
+from .resources import QuizResource, CategoryResource, AnswerResource
 from .models import Quiz, Category, SubCategory, Progress, Question
 from multichoice.models import MCQuestion, Answer
 from true_false.models import TF_Question
@@ -49,6 +49,7 @@ class QuizAdminForm(forms.ModelForm):
 
 
 class QuizAdmin(ImportExportModelAdmin):
+    resource_class = QuizResource
     form = QuizAdminForm
 
     list_display = ('title', 'category', )
@@ -57,6 +58,7 @@ class QuizAdmin(ImportExportModelAdmin):
 
 
 class CategoryAdmin(ImportExportModelAdmin):
+    resource_class = CategoryResource
     search_fields = ('category', )
 
 
@@ -67,7 +69,7 @@ class SubCategoryAdmin(admin.ModelAdmin):
 
 
 class AnswerAdmin(ImportExportModelAdmin):
-    pass
+    resource_class = AnswerResource
 
 
 class MCQuestionAdmin(ImportExportModelAdmin):
