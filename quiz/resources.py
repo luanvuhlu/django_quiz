@@ -12,6 +12,7 @@ class AnswerResource(resources.ModelResource):
     class Meta:
         model = Answer
 
+
 class QuestionResource(resources.ModelResource):
     class Meta:
         model = Question
