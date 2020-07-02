@@ -6,7 +6,7 @@
   	  <strong>{% trans "You answered the above question incorrectly" %}</strong>
     </div>
   {% endif %}
-
+    <input type="hidden" value="This is correct answer ahihi" />
   <table class="table table-bordered">
     <tbody>
   	  {% for answer in previous.answers %}
@@ -20,7 +20,7 @@
                     {% endif %}
                 {% endfor %}
               {% else %}
-                {% if answer.id|add:"0" == your_answer|add:"0" %}
+                {% if answer.id|add:"0" == previous.previous_answer|add:"0" %}
                   {% trans "X. " %}
                 {% endif %}
               {% endif %}
@@ -37,7 +37,7 @@
                     {% endif %}
                 {% endfor %}
               {% else %}
-                {% if answer.id|add:"0" == your_answer|add:"0" %}
+                {% if answer.id|add:"0" == previous.previous_answer|add:"0" %}
                   {% trans "X. " %}
                 {% endif %}
               {% endif %}
