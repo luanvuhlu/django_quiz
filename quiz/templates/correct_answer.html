@@ -13,12 +13,16 @@
         {% if answer.correct %}
   	    <tr class="table-success">
   		  <td>
-              {% if previous.question_type.MCQuestion %}
+              {% if previous.question_type.MCQuestion and previous.previous_answer|get_type == 'list' %}
                 {%  for your_answer in previous.previous_answer %}
                     {% if answer.id|add:"0" == your_answer|add:"0" %}
                         {% trans "X. " %}
                     {% endif %}
                 {% endfor %}
+              {% else %}
+                {% if answer.id|add:"0" == your_answer|add:"0" %}
+                  {% trans "X. " %}
+                {% endif %}
               {% endif %}
               {{ answer.content }}
           </td>
@@ -26,13 +30,16 @@
         {% else %}
   		<tr>
       	  <td>
-              {% if previous.question_type.MCQuestion %}
+              {% if previous.question_type.MCQuestion and previous.previous_answer|get_type == 'list' %}
                 {%  for your_answer in previous.previous_answer %}
                     {% if answer.id|add:"0" == your_answer|add:"0" %}
                         {% trans "X. " %}
                     {% endif %}
                 {% endfor %}
-
+              {% else %}
+                {% if answer.id|add:"0" == your_answer|add:"0" %}
+                  {% trans "X. " %}
+                {% endif %}
               {% endif %}
               {{ answer.content }}
           </td>
